@@ -7,5 +7,7 @@ if __name__ == '__main__':
         modif = modif.replace(punct, "")
     print(modif)
     modif = modif.upper()
-    print(modif,end="")
+    print(modif)
+    modif = modif.lower()
+    print(modif, end="")
     f.close()
