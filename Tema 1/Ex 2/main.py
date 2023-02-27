@@ -5,5 +5,7 @@ if __name__ == '__main__':
     modif = f.read()
     for punct in [".", ",", "?", "!", "-", "_", ":", ";", "/", "(", ")", "'", '"']:
         modif = modif.replace(punct, "")
+    print(modif)
+    modif = modif.upper()
     print(modif,end="")
     f.close()
