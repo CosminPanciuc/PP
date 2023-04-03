@@ -38,23 +38,24 @@ if __name__ == '__main__':
                     for byte in content:
                         frequency[byte] = frequency[byte] + 1
 
-                    freqASCII = sum(frequency[9:10]) + frequency[13] + sum(frequency[32:127])
+                    freqASCIImare = sum(frequency[9:10]) + frequency[13] + sum(frequency[32:127])
+                    freqASCIImici = sum(frequency[0:8]) + sum(frequency[11:12]) + sum(frequency[15:31]) + sum(frequency[128:255])
                     freqTotal = sum(frequency[0:255])
+                    if freqTotal != 0:
+                        if freqASCIImare/freqTotal >= 0.9 and freqASCIImici/freqTotal <= 0.1:
+                            split = os.path.splitext(file)
+                            if split[1] == '.xml':
+                                tree = Et.parse(file_path)
+                                troot = tree.getroot()
+                                xmlFormat.append(XMLFile(file_path, frequency, troot))
+                            else:
+                                ASCII.append(TextASCII(file_path, frequency))
 
-                    if freqTotal - freqASCII < freqTotal / 2:
-                        split = os.path.splitext(file)
-                        if split[1] == '.xml':
-                            tree = Et.parse(file_path)
-                            troot = tree.getroot()
-                            xmlFormat.append(XMLFile(file_path, frequency, troot))
+                        elif frequency[0]/freqTotal >= 0.3:
+                            UNICODE.append(TextUNICODE(file_path, frequency))
+
                         else:
-                            ASCII.append(TextASCII(file_path, frequency))
-
-                    elif 0.3 * freqTotal <= frequency[0]:
-                        UNICODE.append(TextUNICODE(file_path, frequency))
-
-                    else:
-                        BitMap.append(BMP(file_path, frequency, int.from_bytes(content[18:21], byteorder='little'),
+                            BitMap.append(BMP(file_path, frequency, int.from_bytes(content[18:21], byteorder='little'),
                                           int.from_bytes(content[22:25], byteorder='little')))
 
                 finally:
